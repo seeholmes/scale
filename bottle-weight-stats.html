@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bottle Weight Statistics</title>
+  <link rel="apple-touch-icon" href="data:image/png;base64,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"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Bottle Wt"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      --bg:           #0f1117;
+      --panel:        #13151f;
+      --panel-border: #1e2130;
+      --input-bg:     #1a1d27;
+      --input-border: #2a2d3a;
+      --text:         #e8eaf2;
+      --muted:        #5a607a;
+      --faint:        #3a3f55;
+      --fainter:      #2e334d;
+      --accent:       #4fffb0;
+      --accent-text:  #0f1117;
+      --danger:       #ff6b6b;
+    }
+    body.light {
+      --bg:           #f0f2f7;
+      --panel:        #ffffff;
+      --panel-border: #dde1ec;
+      --input-bg:     #f7f8fc;
+      --input-border: #cdd2e0;
+      --text:         #1a1d2e;
+      --muted:        #7a82a0;
+      --faint:        #9aa0b8;
+      --fainter:      #bcc2d4;
+      --accent:       #00a86b;
+      --accent-text:  #ffffff;
+      --danger:       #e05555;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'DM Mono', 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      transition: background 0.25s;
+    }
+
+    .container { width: 100%; max-width: 460px; }
+
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .title {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      transition: color 0.25s;
+    }
+    .title span { color: var(--accent); transition: color 0.25s; }
+    .subtitle {
+      color: var(--faint);
+      font-size: 12px;
+      margin-top: 8px;
+      letter-spacing: 0.08em;
+      transition: color 0.25s;
+    }
+    .theme-toggle {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 20px;
+      cursor: pointer;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .theme-toggle:hover { border-color: var(--accent); }
+    .theme-toggle .icon { font-size: 14px; line-height: 1; }
+    .theme-toggle .tog-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .prec-label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+    .prec-btn {
+      padding: 8px 22px;
+      border-radius: 6px;
+      border: 1.5px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .prec-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+      font-weight: 500;
+    }
+    .prec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+    .spacer { flex: 1; }
+    .clear-btn {
+      background: none;
+      border: 1.5px solid var(--input-border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 7px 18px;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: all 0.15s;
+    }
+    .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    .inputs-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+    }
+    .input-row { display: flex; align-items: center; gap: 10px; }
+    .input-num {
+      color: var(--fainter);
+      font-size: 11px;
+      min-width: 18px;
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+    .weight-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.25s, color 0.25s;
+      text-align: right;
+    }
+    .weight-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79,255,176,0.10);
+    }
+    body.light .weight-input:focus {
+      box-shadow: 0 0 0 3px rgba(0,168,107,0.12);
+    }
+    .weight-input::placeholder { color: var(--fainter); }
+
+    .stats-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 8px 24px 4px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .empty-msg {
+      text-align: center;
+      padding: 28px 0;
+      color: var(--fainter);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--panel-border);
+      transition: border-color 0.25s;
+    }
+    .stat-row:last-of-type { border-bottom: none; }
+    .stat-label { color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .stat-value { color: var(--accent); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; transition: color 0.25s; }
+    .stat-unit { color: var(--faint); font-size: 11px; margin-left: 4px; }
+    .stat-count {
+      padding: 10px 0 8px;
+      text-align: right;
+      color: var(--fainter);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title">BOTTLE WEIGHT<br><span>STATISTICS</span></div>
+        <div class="subtitle">FILL 10 WEIGHTS · GET INSTANT STATS</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <span class="icon" id="theme-icon">☀️</span>
+        <span class="tog-label" id="theme-label">Light</span>
+      </button>
+    </div>
+
+    <div class="controls">
+      <span class="prec-label">Precision</span>
+      <button class="prec-btn active" id="btn01" onclick="setPrecision('0.1')">±0.1</button>
+      <button class="prec-btn" id="btn001" onclick="setPrecision('0.01')">±0.01</button>
+      <div class="spacer"></div>
+      <button class="clear-btn" onclick="clearAll()">CLEAR</button>
+    </div>
+
+    <div class="inputs-panel">
+      <div class="inputs-grid" id="inputs-grid"></div>
+    </div>
+
+    <div class="stats-panel">
+      <div class="empty-msg" id="empty-msg">ENTER WEIGHTS TO SEE RESULTS</div>
+      <div id="stats-content" style="display:none;">
+        <div class="stat-row">
+          <span class="stat-label">Mean</span>
+          <span><span class="stat-value" id="stat-mean">—</span><span class="stat-unit">g</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Std Dev</span>
+          <span><span class="stat-value" id="stat-sd">—</span><span class="stat-unit">g</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">CV%</span>
+          <span><span class="stat-value" id="stat-cv">—</span><span class="stat-unit">%</span></span>
+        </div>
+        <div class="stat-count" id="stat-count"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const NUM = 10;
+    let precision = '0.1';
+    let isLight = false;
+
+    // Build inputs column-first: bottles 1-5 in left col, 6-10 in right col.
+    // DOM order for CSS grid (row-major): slot 0=bottle1, slot 1=bottle6,
+    // slot 2=bottle2, slot 3=bottle7, ... slot 2r=bottle(r+1), slot 2r+1=bottle(r+6)
+    // We store inputs by bottle number (0-indexed) as id="w0"..="w9"
+    // and build DOM in the interleaved order the grid needs.
+    const ROWS = 5; // 5 rows x 2 cols
+    const grid = document.getElementById('inputs-grid');
+    for (var r = 0; r < ROWS; r++) {
+      // left column: bottle r (0-indexed), right column: bottle r+5
+      for (var c = 0; c < 2; c++) {
+        var idx = c === 0 ? r : r + 5;
+        var cell = document.createElement('div');
+        cell.className = 'input-row';
+        cell.innerHTML =
+          '<span class="input-num">' + String(idx + 1).padStart(2, '0') + '</span>' +
+          '<input class="weight-input" type="number" step="0.1" placeholder="0.0" id="w' + idx + '" oninput="update()" onkeydown="handleKey(event,' + idx + ')" />';
+        grid.appendChild(cell);
+      }
+    }
+
+    function handleKey(e, i) {
+      var target = null;
+      // Column 0 = bottles 0-4, Column 1 = bottles 5-9
+      var col = i < 5 ? 0 : 1;
+      var rowPos = i < 5 ? i : i - 5; // 0..4 within column
+
+      if (e.key === 'Enter') {
+        target = (i + 1) % NUM;
+      } else if (e.key === 'ArrowDown') {
+        if (rowPos < ROWS - 1) {
+          target = col === 0 ? i + 1 : i + 1;
+        } else {
+          target = col === 0 ? 5 : 0; // wrap: left col -> top of right, right -> top of left
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (rowPos > 0) {
+          target = i - 1;
+        } else {
+          target = col === 0 ? 9 : 4; // wrap to bottom of other col
+        }
+      } else if (e.key === 'ArrowRight') {
+        target = col === 0 ? i + 5 : i - 5; // jump to same row in other column
+      } else if (e.key === 'ArrowLeft') {
+        target = col === 0 ? i + 5 : i - 5;
+      }
+
+      if (target !== null) {
+        e.preventDefault();
+        var el = document.getElementById('w' + target);
+        el.focus();
+        el.select();
+      }
+    }
+
+    function toggleTheme() {
+      isLight = !isLight;
+      document.body.classList.toggle('light', isLight);
+      document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = isLight ? 'Dark' : 'Light';
+    }
+
+    function setPrecision(p) {
+      precision = p;
+      document.getElementById('btn01').classList.toggle('active', p === '0.1');
+      document.getElementById('btn001').classList.toggle('active', p === '0.01');
+      var ph = p === '0.1' ? '0.0' : '0.00';
+      for (var i = 0; i < NUM; i++) {
+        var inp = document.getElementById('w' + i);
+        inp.step = p;
+        inp.placeholder = ph;
+      }
+      update();
+    }
+
+    function clearAll() {
+      for (var i = 0; i < NUM; i++) {
+        document.getElementById('w' + i).value = '';
+      }
+      update();
+    }
+
+    function update() {
+      var vals = [];
+      for (var i = 0; i < NUM; i++) {
+        var v = parseFloat(document.getElementById('w' + i).value);
+        if (!isNaN(v)) vals.push(v);
+      }
+
+      var empty = document.getElementById('empty-msg');
+      var content = document.getElementById('stats-content');
+
+      if (vals.length === 0) {
+        empty.style.display = '';
+        content.style.display = 'none';
+        return;
+      }
+
+      var mean = vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;
+      var variance = vals.reduce(function(a, b) { return a + Math.pow(b - mean, 2); }, 0) / (vals.length - 1);
+      var sd = Math.sqrt(variance);
+      var cv = mean !== 0 ? (sd / mean) * 100 : 0;
+
+      var prec = precision === '0.1' ? 1 : 2;
+      document.getElementById('stat-mean').textContent = mean.toFixed(prec);
+      document.getElementById('stat-sd').textContent = sd.toFixed(3);
+      document.getElementById('stat-cv').textContent = cv.toFixed(2);
+      document.getElementById('stat-count').textContent = 'n = ' + vals.length + ' / ' + NUM;
+
+      empty.style.display = 'none';
+      content.style.display = '';
+    }
+  </script>
+</body>
+</html>
