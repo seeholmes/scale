@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bottle Weight Statistics</title>
+  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAC+UlEQVR4nO3dQU7bQBiAUai6R3TDdXqbnqm36Yl6BbpCSiMcx46TsT/eWwMzi08zvw0izy+vb+9PEPFt9AZgS4ImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYIm5fvoDdT8/Pt70df/+fHrTjv5mpzQG1oa89rvYdrzy+vb++hNHN1WUTqtbyfoG9zrdBX2eoI+c7QRQPz/M0OfOFrMT0/H3PM9CZoUI8eM8xNwyRX/2em5dEQ4/RnGi3lO6Bm3RCTAxxP0jJEzqvl4OUEvJPB9EzQpgr7AaXw8gr7S6QPeo2MbufbRCPoKI99WeFOyjKAXeFRcW7y//qoEPWHuajdf75OgZxg3jkXQC907skunr8DnCfoT117pxo79EfROOY3XEfQFU1GZq/dL0GeWXuVbXv0j164QNCmCnjB3td/z6h+59tEJ+sTaK3yLq3/k2iWCJsW/ApvgHfMxOaFJEfSJtQ9bWzykjVy7xMhx5iOQa679rWMauXaFoCf4beAxGTlIETQpgiZF0KQImhRBkyJoUgRNiqBJETQpgr4jfwb6eD5jZQM+eHM/BL3Co05egS8n6AVGjRDCvp6gSfFQSIqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSRE0KYImRdCkCJoUQZMiaFIETYqgSfkH/NOJo+ZvnAQAAAAASUVORK5CYII="/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Bottle Wt"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      --bg:           #0f1117;
+      --panel:        #13151f;
+      --panel-border: #1e2130;
+      --input-bg:     #1a1d27;
+      --input-border: #2a2d3a;
+      --text:         #e8eaf2;
+      --muted:        #5a607a;
+      --faint:        #3a3f55;
+      --fainter:      #2e334d;
+      --accent:       #4fffb0;
+      --accent-text:  #0f1117;
+      --danger:       #ff6b6b;
+    }
+    body.light {
+      --bg:           #f0f2f7;
+      --panel:        #ffffff;
+      --panel-border: #dde1ec;
+      --input-bg:     #f7f8fc;
+      --input-border: #cdd2e0;
+      --text:         #1a1d2e;
+      --muted:        #7a82a0;
+      --faint:        #9aa0b8;
+      --fainter:      #bcc2d4;
+      --accent:       #00a86b;
+      --accent-text:  #ffffff;
+      --danger:       #e05555;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'DM Mono', 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      transition: background 0.25s;
+    }
+
+    .container { width: 100%; max-width: 460px; }
+
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .title {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      transition: color 0.25s;
+    }
+    .title span { color: var(--accent); transition: color 0.25s; }
+    .subtitle {
+      color: var(--faint);
+      font-size: 12px;
+      margin-top: 8px;
+      letter-spacing: 0.08em;
+      transition: color 0.25s;
+    }
+    .theme-toggle {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 20px;
+      cursor: pointer;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .theme-toggle:hover { border-color: var(--accent); }
+    .theme-toggle .icon { font-size: 14px; line-height: 1; }
+    .theme-toggle .tog-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .prec-label {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-right: 4px;
+    }
+    .prec-btn {
+      padding: 8px 22px;
+      border-radius: 6px;
+      border: 1.5px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .prec-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+      font-weight: 500;
+    }
+    .prec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+    .spacer { flex: 1; }
+    .clear-btn {
+      background: none;
+      border: 1.5px solid var(--input-border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      padding: 7px 18px;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      transition: all 0.15s;
+    }
+    .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    .inputs-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+    }
+    .input-row { display: flex; align-items: center; gap: 10px; }
+    .input-num {
+      color: var(--fainter);
+      font-size: 11px;
+      min-width: 18px;
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+    .weight-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.25s, color 0.25s;
+      text-align: right;
+    }
+    .weight-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79,255,176,0.10);
+    }
+    body.light .weight-input:focus {
+      box-shadow: 0 0 0 3px rgba(0,168,107,0.12);
+    }
+    .weight-input::placeholder { color: var(--fainter); }
+
+    .stats-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 8px 24px 4px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .empty-msg {
+      text-align: center;
+      padding: 28px 0;
+      color: var(--fainter);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--panel-border);
+      transition: border-color 0.25s;
+    }
+    .stat-row:last-of-type { border-bottom: none; }
+    .stat-label { color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .stat-value { color: var(--accent); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; transition: color 0.25s; }
+    .stat-unit { color: var(--faint); font-size: 11px; margin-left: 4px; }
+    .stat-count {
+      padding: 10px 0 8px;
+      text-align: right;
+      color: var(--fainter);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title">BOTTLE WEIGHT<br><span>STATISTICS</span></div>
+        <div class="subtitle">FILL 10 WEIGHTS · GET INSTANT STATS</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <span class="icon" id="theme-icon">☀️</span>
+        <span class="tog-label" id="theme-label">Light</span>
+      </button>
+    </div>
+
+    <div class="controls">
+      <span class="prec-label">Precision</span>
+      <button class="prec-btn active" id="btn01" onclick="setPrecision('0.1')">±0.1</button>
+      <button class="prec-btn" id="btn001" onclick="setPrecision('0.01')">±0.01</button>
+      <div class="spacer"></div>
+      <button class="clear-btn" onclick="clearAll()">CLEAR</button>
+    </div>
+
+    <div class="inputs-panel">
+      <div class="inputs-grid" id="inputs-grid"></div>
+    </div>
+
+    <div class="stats-panel">
+      <div class="empty-msg" id="empty-msg">ENTER WEIGHTS TO SEE RESULTS</div>
+      <div id="stats-content" style="display:none;">
+        <div class="stat-row">
+          <span class="stat-label">Mean</span>
+          <span><span class="stat-value" id="stat-mean">—</span><span class="stat-unit">g</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Std Dev</span>
+          <span><span class="stat-value" id="stat-sd">—</span><span class="stat-unit">g</span></span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">CV%</span>
+          <span><span class="stat-value" id="stat-cv">—</span><span class="stat-unit">%</span></span>
+        </div>
+        <div class="stat-count" id="stat-count"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const NUM = 10;
+    let precision = '0.1';
+    let isLight = false;
+
+    // Build inputs column-first: bottles 1-5 in left col, 6-10 in right col.
+    // DOM order for CSS grid (row-major): slot 0=bottle1, slot 1=bottle6,
+    // slot 2=bottle2, slot 3=bottle7, ... slot 2r=bottle(r+1), slot 2r+1=bottle(r+6)
+    // We store inputs by bottle number (0-indexed) as id="w0"..="w9"
+    // and build DOM in the interleaved order the grid needs.
+    const ROWS = 5; // 5 rows x 2 cols
+    const grid = document.getElementById('inputs-grid');
+    for (var r = 0; r < ROWS; r++) {
+      // left column: bottle r (0-indexed), right column: bottle r+5
+      for (var c = 0; c < 2; c++) {
+        var idx = c === 0 ? r : r + 5;
+        var cell = document.createElement('div');
+        cell.className = 'input-row';
+        cell.innerHTML =
+          '<span class="input-num">' + String(idx + 1).padStart(2, '0') + '</span>' +
+          '<input class="weight-input" type="number" step="0.1" placeholder="0.0" id="w' + idx + '" oninput="update()" onkeydown="handleKey(event,' + idx + ')" />';
+        grid.appendChild(cell);
+      }
+    }
+
+    function handleKey(e, i) {
+      var target = null;
+      // Column 0 = bottles 0-4, Column 1 = bottles 5-9
+      var col = i < 5 ? 0 : 1;
+      var rowPos = i < 5 ? i : i - 5; // 0..4 within column
+
+      if (e.key === 'Enter') {
+        target = (i + 1) % NUM;
+      } else if (e.key === 'ArrowDown') {
+        if (rowPos < ROWS - 1) {
+          target = col === 0 ? i + 1 : i + 1;
+        } else {
+          target = col === 0 ? 5 : 0; // wrap: left col -> top of right, right -> top of left
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (rowPos > 0) {
+          target = i - 1;
+        } else {
+          target = col === 0 ? 9 : 4; // wrap to bottom of other col
+        }
+      } else if (e.key === 'ArrowRight') {
+        target = col === 0 ? i + 5 : i - 5; // jump to same row in other column
+      } else if (e.key === 'ArrowLeft') {
+        target = col === 0 ? i + 5 : i - 5;
+      }
+
+      if (target !== null) {
+        e.preventDefault();
+        var el = document.getElementById('w' + target);
+        el.focus();
+        el.select();
+      }
+    }
+
+    function toggleTheme() {
+      isLight = !isLight;
+      document.body.classList.toggle('light', isLight);
+      document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
+      document.getElementById('theme-label').textContent = isLight ? 'Dark' : 'Light';
+    }
+
+    function setPrecision(p) {
+      precision = p;
+      document.getElementById('btn01').classList.toggle('active', p === '0.1');
+      document.getElementById('btn001').classList.toggle('active', p === '0.01');
+      var ph = p === '0.1' ? '0.0' : '0.00';
+      for (var i = 0; i < NUM; i++) {
+        var inp = document.getElementById('w' + i);
+        inp.step = p;
+        inp.placeholder = ph;
+      }
+      update();
+    }
+
+    function clearAll() {
+      for (var i = 0; i < NUM; i++) {
+        document.getElementById('w' + i).value = '';
+      }
+      update();
+    }
+
+    function update() {
+      var vals = [];
+      for (var i = 0; i < NUM; i++) {
+        var v = parseFloat(document.getElementById('w' + i).value);
+        if (!isNaN(v)) vals.push(v);
+      }
+
+      var empty = document.getElementById('empty-msg');
+      var content = document.getElementById('stats-content');
+
+      if (vals.length === 0) {
+        empty.style.display = '';
+        content.style.display = 'none';
+        return;
+      }
+
+      var mean = vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;
+      var variance = vals.reduce(function(a, b) { return a + Math.pow(b - mean, 2); }, 0) / (vals.length - 1);
+      var sd = Math.sqrt(variance);
+      var cv = mean !== 0 ? (sd / mean) * 100 : 0;
+
+      var prec = precision === '0.1' ? 1 : 2;
+      document.getElementById('stat-mean').textContent = mean.toFixed(prec);
+      document.getElementById('stat-sd').textContent = sd.toFixed(3);
+      document.getElementById('stat-cv').textContent = cv.toFixed(2);
+      document.getElementById('stat-count').textContent = 'n = ' + vals.length + ' / ' + NUM;
+
+      empty.style.display = 'none';
+      content.style.display = '';
+    }
+  </script>
+</body>
+</html>
