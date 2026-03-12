@@ -279,7 +279,14 @@
   <script>
     const NUM = 10;
     let precision = '0.1';
-    let isLight = false;
+    let isLight = localStorage.getItem('theme') === 'light';
+
+    // Apply saved theme immediately
+    if (isLight) {
+      document.body.classList.add('light');
+      document.getElementById('theme-icon').textContent = '🌙';
+      document.getElementById('theme-label').textContent = 'Dark';
+    }
 
     // Build inputs column-first: bottles 1-5 in left col, 6-10 in right col.
     // DOM order for CSS grid (row-major): slot 0=bottle1, slot 1=bottle6,
@@ -340,6 +347,7 @@
       document.body.classList.toggle('light', isLight);
       document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
       document.getElementById('theme-label').textContent = isLight ? 'Dark' : 'Light';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
 
     function setPrecision(p) {
