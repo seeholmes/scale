@@ -74,6 +74,12 @@
       transition: color 0.25s;
     }
     .title span { color: var(--accent); transition: color 0.25s; }
+    .version {
+      color: var(--fainter);
+      font-size: 10px;
+      margin-top: 4px;
+      letter-spacing: 0.1em;
+    }
     .subtitle {
       color: var(--faint);
       font-size: 12px;
@@ -370,6 +376,7 @@
       <div>
         <div class="title">BOTTLE WEIGHT<br><span>STATISTICS</span></div>
         <div class="subtitle">FILL 10 WEIGHTS · GET INSTANT STATS</div>
+        <div class="version" id="version-label">v1.00</div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
         <span class="icon" id="theme-icon">☀️</span>
@@ -518,9 +525,15 @@
       document.getElementById('net-mid').textContent  = fmt(netMid);
       document.getElementById('net-high').textContent = fmt(netHigh);
 
-      document.getElementById('gross-low').textContent  = (netLow  !== null && meanVal !== null) ? (netLow  + meanVal).toFixed(prec) : '—';
-      document.getElementById('gross-mid').textContent  = (netMid  !== null && meanVal !== null) ? (netMid  + meanVal).toFixed(prec) : '—';
-      document.getElementById('gross-high').textContent = (netHigh !== null && meanVal !== null) ? (netHigh + meanVal).toFixed(prec) : '—';
+      // Round intermediates to display precision before adding (avoids Excel-style rounding mismatch)
+      var roundedMean = meanVal !== null ? parseFloat(meanVal.toFixed(prec)) : null;
+      var roundedNetLow  = netLow  !== null ? parseFloat(netLow.toFixed(prec))  : null;
+      var roundedNetMid  = netMid  !== null ? parseFloat(netMid.toFixed(prec))  : null;
+      var roundedNetHigh = netHigh !== null ? parseFloat(netHigh.toFixed(prec)) : null;
+
+      document.getElementById('gross-low').textContent  = (roundedNetLow  !== null && roundedMean !== null) ? (roundedNetLow  + roundedMean).toFixed(prec) : '—';
+      document.getElementById('gross-mid').textContent  = (roundedNetMid  !== null && roundedMean !== null) ? (roundedNetMid  + roundedMean).toFixed(prec) : '—';
+      document.getElementById('gross-high').textContent = (roundedNetHigh !== null && roundedMean !== null) ? (roundedNetHigh + roundedMean).toFixed(prec) : '—';
     }
 
     function handleKey(e, i) {
