@@ -376,6 +376,88 @@
     .min-weight-value { color: var(--accent); font-size: 26px; font-weight: 500; letter-spacing: -0.01em; }
     .min-weight-unit { color: var(--faint); font-size: 11px; margin-left: 4px; }
     .min-weight-empty { color: var(--fainter); font-size: 12px; letter-spacing: 0.08em; text-align: center; padding: 8px 0; }
+
+    /* ── ABOUT TAB ── */
+    .about-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .about-app-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .about-app-name span { color: var(--accent); }
+    .about-version-badge {
+      display: inline-block;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+    .about-section-title {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      margin-top: 20px;
+    }
+    .about-section-title:first-of-type { margin-top: 0; }
+    .about-release {
+      border-left: 2px solid var(--accent);
+      padding-left: 14px;
+      margin-bottom: 16px;
+    }
+    .about-release-ver {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+    .about-release-date {
+      color: var(--fainter);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+    .about-release-notes {
+      color: var(--faint);
+      font-size: 11px;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+    }
+    .about-release-notes li {
+      margin-left: 14px;
+      margin-bottom: 2px;
+    }
+    .about-link {
+      display: block;
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      color: var(--accent);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      text-align: center;
+      transition: border-color 0.15s;
+    }
+    .about-link:hover { border-color: var(--accent); }
   </style>
 </head>
 <body>
@@ -398,6 +480,7 @@
     <div class="tabs">
       <button class="tab-btn active" id="tab-bottle-btn" onclick="switchTab('bottle')">Bottle Wt</button>
       <button class="tab-btn" id="tab-comp-btn" onclick="switchTab('comp')">Component Wt</button>
+      <button class="tab-btn" id="tab-about-btn" onclick="switchTab('about')">About</button>
     </div>
 
     <!-- ══ TAB 1: BOTTLE WEIGHT ══ -->
@@ -531,6 +614,53 @@
 
     </div><!-- end tab-comp -->
 
+
+    <!-- ══ TAB 3: ABOUT ══ -->
+    <div class="tab-screen" id="tab-about">
+      <div class="about-panel">
+        <div class="about-app-name">QC WEIGHT <span>TOOLS</span></div>
+        <div class="about-version-badge">v1.10</div>
+
+        <div class="about-section-title">Release History</div>
+
+        <div class="about-release">
+          <div class="about-release-ver">v1.10</div>
+          <div class="about-release-date">2026-03-24</div>
+          <div class="about-release-notes">
+            <ul>
+              <li>Added Component Weight tab</li>
+              <li>6 component rows, 3 samples each</li>
+              <li>Auto row averages, column sums</li>
+              <li>Minimum weight calculation</li>
+              <li>Two-tab interface</li>
+              <li>App renamed to QC Weight Tools</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="about-release">
+          <div class="about-release-ver">v1.00</div>
+          <div class="about-release-date">2026-03-23</div>
+          <div class="about-release-notes">
+            <ul>
+              <li>Initial release</li>
+              <li>10-bottle weight entry, 2-column layout</li>
+              <li>Mean, sample SD (n&minus;1), CV%</li>
+              <li>Fill target calculator with SG</li>
+              <li>Net &amp; gross targets (display-precision rounding)</li>
+              <li>Light / dark theme with persistence</li>
+              <li>Keyboard navigation</li>
+              <li>iOS home screen ready</li>
+            </ul>
+          </div>
+        </div>
+
+        <a class="about-link" href="https://github.com/seeholmes/scale" target="_blank">
+          ↗ View on GitHub
+        </a>
+      </div>
+    </div><!-- end tab-about -->
+
   </div><!-- end container -->
 
   <script>
@@ -551,10 +681,10 @@
 
     // ── TABS ──
     function switchTab(name) {
-      document.getElementById('tab-bottle').classList.toggle('active', name === 'bottle');
-      document.getElementById('tab-comp').classList.toggle('active', name === 'comp');
-      document.getElementById('tab-bottle-btn').classList.toggle('active', name === 'bottle');
-      document.getElementById('tab-comp-btn').classList.toggle('active', name === 'comp');
+      ['bottle', 'comp', 'about'].forEach(function(t) {
+        document.getElementById('tab-' + t).classList.toggle('active', name === t);
+        document.getElementById('tab-' + t + '-btn').classList.toggle('active', name === t);
+      });
     }
 
     // ══════════════════════════════
