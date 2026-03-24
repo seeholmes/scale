@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bottle Weight Statistics</title>
+  <title>QC Weight Tools</title>
   <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="Bottle Wt"/>
+  <meta name="apple-mobile-web-app-title" content="QC Weights"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,19 +50,20 @@
       background: var(--bg);
       font-family: 'DM Mono', 'Courier New', monospace;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 32px 16px;
       transition: background 0.25s;
     }
 
-    .container { width: 100%; max-width: 460px; }
+    .container { width: 100%; max-width: 500px; }
 
+    /* ── HEADER ── */
     .header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     .title {
       font-family: 'Syne', sans-serif;
@@ -74,19 +75,8 @@
       transition: color 0.25s;
     }
     .title span { color: var(--accent); transition: color 0.25s; }
-    .version {
-      color: var(--fainter);
-      font-size: 10px;
-      margin-top: 4px;
-      letter-spacing: 0.1em;
-    }
-    .subtitle {
-      color: var(--faint);
-      font-size: 12px;
-      margin-top: 8px;
-      letter-spacing: 0.08em;
-      transition: color 0.25s;
-    }
+    .version { color: var(--fainter); font-size: 10px; margin-top: 4px; letter-spacing: 0.1em; }
+    .subtitle { color: var(--faint); font-size: 12px; margin-top: 8px; letter-spacing: 0.08em; transition: color 0.25s; }
     .theme-toggle {
       background: var(--panel);
       border: 1.5px solid var(--panel-border);
@@ -111,19 +101,45 @@
       transition: color 0.25s;
     }
 
+    /* ── TABS ── */
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 8px;
+      border: 1.5px solid var(--input-border);
+      background: var(--input-bg);
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-text);
+      font-weight: 500;
+    }
+    .tab-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+    .tab-screen { display: none; }
+    .tab-screen.active { display: block; }
+
+    /* ── SHARED CONTROLS ── */
     .controls {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-bottom: 24px;
     }
-    .prec-label {
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-right: 4px;
-    }
+    .prec-label { color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 4px; }
     .prec-btn {
       padding: 8px 22px;
       border-radius: 6px;
@@ -136,12 +152,7 @@
       transition: all 0.15s;
       letter-spacing: 0.04em;
     }
-    .prec-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--accent-text);
-      font-weight: 500;
-    }
+    .prec-btn.active { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 500; }
     .prec-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
     .spacer { flex: 1; }
     .clear-btn {
@@ -158,6 +169,7 @@
     }
     .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
 
+    /* ── BOTTLE WEIGHT TAB ── */
     .inputs-panel {
       background: var(--panel);
       border: 1.5px solid var(--panel-border);
@@ -166,20 +178,9 @@
       margin-bottom: 24px;
       transition: background 0.25s, border-color 0.25s;
     }
-    .inputs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 20px;
-    }
+    .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
     .input-row { display: flex; align-items: center; gap: 10px; }
-    .input-num {
-      color: var(--fainter);
-      font-size: 11px;
-      min-width: 18px;
-      text-align: right;
-      font-family: 'DM Mono', monospace;
-      letter-spacing: 0.04em;
-    }
+    .input-num { color: var(--fainter); font-size: 11px; min-width: 18px; text-align: right; font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
     .weight-input {
       width: 100%;
       background: var(--input-bg);
@@ -193,13 +194,8 @@
       transition: border-color 0.18s, box-shadow 0.18s, background 0.25s, color 0.25s;
       text-align: right;
     }
-    .weight-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(79,255,176,0.10);
-    }
-    body.light .weight-input:focus {
-      box-shadow: 0 0 0 3px rgba(0,168,107,0.12);
-    }
+    .weight-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,255,176,0.10); }
+    body.light .weight-input:focus { box-shadow: 0 0 0 3px rgba(0,168,107,0.12); }
     .weight-input::placeholder { color: var(--fainter); }
 
     .stats-panel {
@@ -209,13 +205,7 @@
       padding: 8px 24px 4px;
       transition: background 0.25s, border-color 0.25s;
     }
-    .empty-msg {
-      text-align: center;
-      padding: 28px 0;
-      color: var(--fainter);
-      font-size: 12px;
-      letter-spacing: 0.1em;
-    }
+    .empty-msg { text-align: center; padding: 28px 0; color: var(--fainter); font-size: 12px; letter-spacing: 0.1em; }
     .stat-row {
       display: flex;
       justify-content: space-between;
@@ -228,13 +218,7 @@
     .stat-label { color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
     .stat-value { color: var(--accent); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; transition: color 0.25s; }
     .stat-unit { color: var(--faint); font-size: 11px; margin-left: 4px; }
-    .stat-count {
-      padding: 10px 0 8px;
-      text-align: right;
-      color: var(--fainter);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-    }
+    .stat-count { padding: 10px 0 8px; text-align: right; color: var(--fainter); font-size: 10px; letter-spacing: 0.1em; }
 
     /* ── TARGET PANEL ── */
     .target-panel {
@@ -245,26 +229,9 @@
       margin-bottom: 24px;
       transition: background 0.25s, border-color 0.25s;
     }
-    .target-panel-title {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    .target-sg-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .target-sg-label {
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
+    .target-panel-title { color: var(--muted); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px; }
+    .target-sg-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .target-sg-label { color: var(--muted); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
     .target-sg-input {
       width: 90px;
       background: var(--input-bg);
@@ -278,27 +245,12 @@
       text-align: right;
       transition: border-color 0.18s, box-shadow 0.18s;
     }
-    .target-sg-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(79,255,176,0.10);
-    }
-    body.light .target-sg-input:focus {
-      box-shadow: 0 0 0 3px rgba(0,168,107,0.12);
-    }
+    .target-sg-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,255,176,0.10); }
+    body.light .target-sg-input:focus { box-shadow: 0 0 0 3px rgba(0,168,107,0.12); }
     .target-sg-input::placeholder { color: var(--fainter); }
-    .target-limits-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-    }
+    .target-limits-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     .target-limit-col { display: flex; flex-direction: column; gap: 4px; }
-    .target-limit-label {
-      color: var(--fainter);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      text-align: center;
-    }
+    .target-limit-label { color: var(--fainter); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
     .target-limit-input {
       width: 100%;
       background: var(--input-bg);
@@ -312,71 +264,129 @@
       text-align: right;
       transition: border-color 0.18s, box-shadow 0.18s;
     }
-    .target-limit-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(79,255,176,0.10);
-    }
-    body.light .target-limit-input:focus {
-      box-shadow: 0 0 0 3px rgba(0,168,107,0.12);
-    }
+    .target-limit-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,255,176,0.10); }
+    body.light .target-limit-input:focus { box-shadow: 0 0 0 3px rgba(0,168,107,0.12); }
     .target-limit-input::placeholder { color: var(--fainter); }
-    .target-results {
-      margin-top: 14px;
-      border-top: 1px solid var(--panel-border);
-      padding-top: 12px;
-      display: none;
-    }
-    .target-results-row {
-      display: grid;
-      grid-template-columns: 80px 1fr 1fr 1fr;
-      gap: 6px;
-      align-items: center;
-      margin-bottom: 6px;
-    }
+    .target-results { margin-top: 14px; border-top: 1px solid var(--panel-border); padding-top: 12px; display: none; }
+    .target-results-row { display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 6px; align-items: center; margin-bottom: 6px; }
     .target-results-row:last-child { margin-bottom: 0; }
-    .tr-row-label {
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .tr-cell {
-      background: var(--input-bg);
+    .tr-row-label { color: var(--muted); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .tr-cell { background: var(--input-bg); border: 1.5px solid var(--panel-border); border-radius: 6px; padding: 7px 10px; text-align: right; font-size: 13px; color: var(--text); transition: background 0.25s; }
+    .tr-cell.gross { color: var(--accent); border-color: var(--accent); font-weight: 500; }
+    .tr-col-headers { display: grid; grid-template-columns: 80px 1fr 1fr 1fr; gap: 6px; margin-bottom: 4px; }
+    .tr-col-header { color: var(--fainter); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; text-align: right; }
+
+    /* ── COMPONENT WEIGHT TAB ── */
+    .comp-panel {
+      background: var(--panel);
       border: 1.5px solid var(--panel-border);
-      border-radius: 6px;
-      padding: 7px 10px;
-      text-align: right;
-      font-size: 13px;
-      color: var(--text);
-      transition: background 0.25s;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      transition: background 0.25s, border-color 0.25s;
+      overflow-x: auto;
     }
-    .tr-cell.gross {
-      color: var(--accent);
-      border-color: var(--accent);
-      font-weight: 500;
+    .comp-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 5px;
     }
-    .tr-col-headers {
-      display: grid;
-      grid-template-columns: 80px 1fr 1fr 1fr;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-    .tr-col-header {
+    .comp-table thead th {
       color: var(--fainter);
       font-size: 10px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       text-align: right;
+      padding: 0 4px 8px 4px;
+      font-weight: 400;
     }
+    .comp-table thead th:first-child { text-align: left; }
+    .comp-table tbody tr td:first-child {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding-right: 8px;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .comp-input {
+      width: 100%;
+      min-width: 62px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      padding: 7px 8px;
+      outline: none;
+      text-align: right;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .comp-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(79,255,176,0.10); }
+    body.light .comp-input:focus { box-shadow: 0 0 0 2px rgba(0,168,107,0.12); }
+    .comp-input::placeholder { color: var(--fainter); }
+    .comp-avg {
+      background: var(--input-bg);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 7px 8px;
+      text-align: right;
+      font-size: 13px;
+      color: var(--muted);
+      min-width: 62px;
+      display: block;
+    }
+    .comp-avg.has-value { color: var(--text); }
+    .comp-table tfoot td {
+      padding-top: 6px;
+      vertical-align: middle;
+    }
+    .comp-table tfoot td:first-child {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .comp-sum {
+      background: var(--input-bg);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 6px;
+      padding: 7px 8px;
+      text-align: right;
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+    }
+    .comp-sum.has-value { color: var(--text); }
+    .comp-sum.avg-sum { color: var(--accent); border-color: var(--accent); font-weight: 500; }
+
+    .min-weight-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .min-weight-title { color: var(--muted); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px; }
+    .min-weight-formula { color: var(--faint); font-size: 11px; letter-spacing: 0.04em; margin-bottom: 12px; line-height: 1.6; }
+    .min-weight-formula span { color: var(--muted); }
+    .min-weight-result-row { display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; border-top: 1px solid var(--panel-border); }
+    .min-weight-label { color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .min-weight-value { color: var(--accent); font-size: 26px; font-weight: 500; letter-spacing: -0.01em; }
+    .min-weight-unit { color: var(--faint); font-size: 11px; margin-left: 4px; }
+    .min-weight-empty { color: var(--fainter); font-size: 12px; letter-spacing: 0.08em; text-align: center; padding: 8px 0; }
   </style>
 </head>
 <body>
   <div class="container">
+
+    <!-- HEADER -->
     <div class="header">
       <div>
-        <div class="title">BOTTLE WEIGHT<br><span>STATISTICS</span></div>
-        <div class="subtitle">FILL 10 WEIGHTS · GET INSTANT STATS</div>
-        <div class="version" id="version-label">v1.00</div>
+        <div class="title">QC WEIGHT<br><span>TOOLS</span></div>
+
+        <div class="version">v1.10</div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
         <span class="icon" id="theme-icon">☀️</span>
@@ -384,198 +394,209 @@
       </button>
     </div>
 
-    <div class="controls">
-      <span class="prec-label">Precision</span>
-      <button class="prec-btn active" id="btn01" onclick="setPrecision('0.1')">±0.1</button>
-      <button class="prec-btn" id="btn001" onclick="setPrecision('0.01')">±0.01</button>
-      <div class="spacer"></div>
-      <button class="clear-btn" onclick="clearAll()">CLEAR</button>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-bottle-btn" onclick="switchTab('bottle')">Bottle Wt</button>
+      <button class="tab-btn" id="tab-comp-btn" onclick="switchTab('comp')">Component Wt</button>
     </div>
 
+    <!-- ══ TAB 1: BOTTLE WEIGHT ══ -->
+    <div class="tab-screen active" id="tab-bottle">
 
-    <!-- TARGET PANEL -->
-    <div class="target-panel">
-      <div class="target-panel-title">Fill Targets</div>
-      <div class="target-sg-row">
-        <span class="target-sg-label">Spec. Gravity</span>
-        <input class="target-sg-input weight-input" type="number" step="0.01" min="0.01" max="2" placeholder="1.00" id="sg" oninput="updateTargets()" />
+      <!-- Fill Targets -->
+      <div class="target-panel">
+        <div class="target-panel-title">Fill Targets</div>
+        <div class="target-sg-row">
+          <span class="target-sg-label">Spec. Gravity</span>
+          <input class="target-sg-input" type="number" step="0.01" min="0.01" max="2" placeholder="1.00" id="sg" oninput="updateTargets()" />
+        </div>
+        <div class="target-limits-grid">
+          <div class="target-limit-col">
+            <span class="target-limit-label">Low</span>
+            <input class="target-limit-input" type="number" step="0.1" placeholder="0.0" id="tgt-low" oninput="updateTargets()" />
+          </div>
+          <div class="target-limit-col">
+            <span class="target-limit-label">Target</span>
+            <input class="target-limit-input" type="number" step="0.1" placeholder="0.0" id="tgt-mid" oninput="updateTargets()" />
+          </div>
+          <div class="target-limit-col">
+            <span class="target-limit-label">High</span>
+            <input class="target-limit-input" type="number" step="0.1" placeholder="0.0" id="tgt-high" oninput="updateTargets()" />
+          </div>
+        </div>
+        <div class="target-results" id="target-results">
+          <div class="tr-col-headers">
+            <div></div>
+            <div class="tr-col-header">Low</div>
+            <div class="tr-col-header">Target</div>
+            <div class="tr-col-header">High</div>
+          </div>
+          <div class="target-results-row">
+            <span class="tr-row-label">Net</span>
+            <span class="tr-cell" id="net-low">—</span>
+            <span class="tr-cell" id="net-mid">—</span>
+            <span class="tr-cell" id="net-high">—</span>
+          </div>
+          <div class="target-results-row">
+            <span class="tr-row-label">Gross</span>
+            <span class="tr-cell gross" id="gross-low">—</span>
+            <span class="tr-cell gross" id="gross-mid">—</span>
+            <span class="tr-cell gross" id="gross-high">—</span>
+          </div>
+        </div>
       </div>
-      <div class="target-limits-grid">
-        <div class="target-limit-col">
-          <span class="target-limit-label">Low</span>
-          <input class="target-limit-input weight-input" type="number" step="0.1" placeholder="0.0" id="tgt-low" oninput="updateTargets()" />
-        </div>
-        <div class="target-limit-col">
-          <span class="target-limit-label">Target</span>
-          <input class="target-limit-input weight-input" type="number" step="0.1" placeholder="0.0" id="tgt-mid" oninput="updateTargets()" />
-        </div>
-        <div class="target-limit-col">
-          <span class="target-limit-label">High</span>
-          <input class="target-limit-input weight-input" type="number" step="0.1" placeholder="0.0" id="tgt-high" oninput="updateTargets()" />
-        </div>
-      </div>
-      <div class="target-results" id="target-results">
-        <div class="tr-col-headers">
-          <div></div>
-          <div class="tr-col-header">Low</div>
-          <div class="tr-col-header">Target</div>
-          <div class="tr-col-header">High</div>
-        </div>
-        <div class="target-results-row">
-          <span class="tr-row-label">Net</span>
-          <span class="tr-cell" id="net-low">—</span>
-          <span class="tr-cell" id="net-mid">—</span>
-          <span class="tr-cell" id="net-high">—</span>
-        </div>
-        <div class="target-results-row">
-          <span class="tr-row-label">Gross</span>
-          <span class="tr-cell gross" id="gross-low">—</span>
-          <span class="tr-cell gross" id="gross-mid">—</span>
-          <span class="tr-cell gross" id="gross-high">—</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="inputs-panel">
-      <div class="inputs-grid" id="inputs-grid"></div>
-    </div>
-
-    <div class="stats-panel">
-      <div class="empty-msg" id="empty-msg">ENTER WEIGHTS TO SEE RESULTS</div>
-      <div id="stats-content" style="display:none;">
-        <div class="stat-row">
-          <span class="stat-label">Mean</span>
-          <span><span class="stat-value" id="stat-mean">—</span><span class="stat-unit">g</span></span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">Std Dev</span>
-          <span><span class="stat-value" id="stat-sd">—</span><span class="stat-unit">g</span></span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">CV%</span>
-          <span><span class="stat-value" id="stat-cv">—</span><span class="stat-unit">%</span></span>
-        </div>
-        <div class="stat-count" id="stat-count"></div>
+      <!-- Precision + Clear -->
+      <div class="controls">
+        <span class="prec-label">Precision</span>
+        <button class="prec-btn active" id="btn01" onclick="setPrecision('0.1')">±0.1</button>
+        <button class="prec-btn" id="btn001" onclick="setPrecision('0.01')">±0.01</button>
+        <div class="spacer"></div>
+        <button class="clear-btn" onclick="clearBottle()">CLEAR</button>
       </div>
-    </div>
-  </div>
+
+      <!-- Bottle inputs -->
+      <div class="inputs-panel">
+        <div class="inputs-grid" id="inputs-grid"></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-panel">
+        <div class="empty-msg" id="empty-msg">ENTER WEIGHTS TO SEE RESULTS</div>
+        <div id="stats-content" style="display:none;">
+          <div class="stat-row">
+            <span class="stat-label">Mean</span>
+            <span><span class="stat-value" id="stat-mean">—</span><span class="stat-unit">g</span></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Std Dev</span>
+            <span><span class="stat-value" id="stat-sd">—</span><span class="stat-unit">g</span></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CV%</span>
+            <span><span class="stat-value" id="stat-cv">—</span><span class="stat-unit">%</span></span>
+          </div>
+          <div class="stat-count" id="stat-count"></div>
+        </div>
+      </div>
+
+    </div><!-- end tab-bottle -->
+
+    <!-- ══ TAB 2: COMPONENT WEIGHT ══ -->
+    <div class="tab-screen" id="tab-comp">
+
+      <div class="controls">
+        <div class="spacer"></div>
+        <button class="clear-btn" onclick="clearComp()">CLEAR</button>
+      </div>
+
+      <div class="comp-panel">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>S1</th>
+              <th>S2</th>
+              <th>S3</th>
+              <th>Avg</th>
+            </tr>
+          </thead>
+          <tbody id="comp-tbody"></tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td><span class="comp-sum" id="csum-0">—</span></td>
+              <td><span class="comp-sum" id="csum-1">—</span></td>
+              <td><span class="comp-sum" id="csum-2">—</span></td>
+              <td><span class="comp-sum avg-sum" id="csum-avg">—</span></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="min-weight-panel">
+        <div class="min-weight-title">Minimum Weight Calculation</div>
+        <div class="min-weight-formula">
+          Avg of Total &minus; (0.5 &times; Avg of lightest component)<br>
+          <span id="mw-formula-detail">&nbsp;</span>
+        </div>
+        <div class="min-weight-result-row">
+          <span class="min-weight-label">Min Weight</span>
+          <span>
+            <span class="min-weight-value" id="mw-result">—</span>
+            <span class="min-weight-unit">g</span>
+          </span>
+        </div>
+      </div>
+
+    </div><!-- end tab-comp -->
+
+  </div><!-- end container -->
 
   <script>
-    const NUM = 10;
-    let precision = '0.1';
-    var currentMean = null;
-    let isLight = localStorage.getItem('theme') === 'light';
-
-    // Apply saved theme immediately
+    // ── THEME ──
+    var isLight = localStorage.getItem('theme') === 'light';
     if (isLight) {
       document.body.classList.add('light');
       document.getElementById('theme-icon').textContent = '🌙';
       document.getElementById('theme-label').textContent = 'Dark';
     }
-
-    // Build inputs column-first: bottles 1-5 in left col, 6-10 in right col.
-    // DOM order for CSS grid (row-major): slot 0=bottle1, slot 1=bottle6,
-    // slot 2=bottle2, slot 3=bottle7, ... slot 2r=bottle(r+1), slot 2r+1=bottle(r+6)
-    // We store inputs by bottle number (0-indexed) as id="w0"..="w9"
-    // and build DOM in the interleaved order the grid needs.
-    const ROWS = 5; // 5 rows x 2 cols
-    const grid = document.getElementById('inputs-grid');
-    for (var r = 0; r < ROWS; r++) {
-      // left column: bottle r (0-indexed), right column: bottle r+5
-      for (var c = 0; c < 2; c++) {
-        var idx = c === 0 ? r : r + 5;
-        var cell = document.createElement('div');
-        cell.className = 'input-row';
-        cell.innerHTML =
-          '<span class="input-num">' + String(idx + 1).padStart(2, '0') + '</span>' +
-          '<input class="weight-input" type="number" step="0.1" placeholder="0.0" id="w' + idx + '" oninput="update()" onkeydown="handleKey(event,' + idx + ')" />';
-        grid.appendChild(cell);
-      }
-    }
-
-
-    function updateTargets() {
-      var sg = parseFloat(document.getElementById('sg').value);
-      var low = parseFloat(document.getElementById('tgt-low').value);
-      var mid = parseFloat(document.getElementById('tgt-mid').value);
-      var high = parseFloat(document.getElementById('tgt-high').value);
-
-      var resultsEl = document.getElementById('target-results');
-
-      // Need at least SG and one limit to show anything
-      if (isNaN(sg) || (isNaN(low) && isNaN(mid) && isNaN(high))) {
-        resultsEl.style.display = 'none';
-        return;
-      }
-
-      resultsEl.style.display = 'block';
-
-      // Net = nominal × SG
-      var netLow  = isNaN(low)  ? null : low  * sg;
-      var netMid  = isNaN(mid)  ? null : mid  * sg;
-      var netHigh = isNaN(high) ? null : high * sg;
-
-      // Gross = net + mean bottle weight (if available)
-      var meanVal = currentMean;
-
-      var prec = precision === '0.1' ? 1 : 2;
-      var fmt = function(v) { return v !== null ? v.toFixed(prec) : '—'; };
-
-      document.getElementById('net-low').textContent  = fmt(netLow);
-      document.getElementById('net-mid').textContent  = fmt(netMid);
-      document.getElementById('net-high').textContent = fmt(netHigh);
-
-      // Round intermediates to display precision before adding (avoids Excel-style rounding mismatch)
-      var roundedMean = meanVal !== null ? parseFloat(meanVal.toFixed(prec)) : null;
-      var roundedNetLow  = netLow  !== null ? parseFloat(netLow.toFixed(prec))  : null;
-      var roundedNetMid  = netMid  !== null ? parseFloat(netMid.toFixed(prec))  : null;
-      var roundedNetHigh = netHigh !== null ? parseFloat(netHigh.toFixed(prec)) : null;
-
-      document.getElementById('gross-low').textContent  = (roundedNetLow  !== null && roundedMean !== null) ? (roundedNetLow  + roundedMean).toFixed(prec) : '—';
-      document.getElementById('gross-mid').textContent  = (roundedNetMid  !== null && roundedMean !== null) ? (roundedNetMid  + roundedMean).toFixed(prec) : '—';
-      document.getElementById('gross-high').textContent = (roundedNetHigh !== null && roundedMean !== null) ? (roundedNetHigh + roundedMean).toFixed(prec) : '—';
-    }
-
-    function handleKey(e, i) {
-      var target = null;
-      // Column 0 = bottles 0-4, Column 1 = bottles 5-9
-      var col = i < 5 ? 0 : 1;
-      var rowPos = i < 5 ? i : i - 5; // 0..4 within column
-
-      if (e.key === 'Enter') {
-        target = (i + 1) % NUM;
-      } else if (e.key === 'ArrowDown') {
-        if (rowPos < ROWS - 1) {
-          target = col === 0 ? i + 1 : i + 1;
-        } else {
-          target = col === 0 ? 5 : 0; // wrap: left col -> top of right, right -> top of left
-        }
-      } else if (e.key === 'ArrowUp') {
-        if (rowPos > 0) {
-          target = i - 1;
-        } else {
-          target = col === 0 ? 9 : 4; // wrap to bottom of other col
-        }
-      } else if (e.key === 'ArrowRight') {
-        target = col === 0 ? i + 5 : i - 5; // jump to same row in other column
-      } else if (e.key === 'ArrowLeft') {
-        target = col === 0 ? i + 5 : i - 5;
-      }
-
-      if (target !== null) {
-        e.preventDefault();
-        var el = document.getElementById('w' + target);
-        el.focus();
-        el.select();
-      }
-    }
-
     function toggleTheme() {
       isLight = !isLight;
       document.body.classList.toggle('light', isLight);
       document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
       document.getElementById('theme-label').textContent = isLight ? 'Dark' : 'Light';
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    }
+
+    // ── TABS ──
+    function switchTab(name) {
+      document.getElementById('tab-bottle').classList.toggle('active', name === 'bottle');
+      document.getElementById('tab-comp').classList.toggle('active', name === 'comp');
+      document.getElementById('tab-bottle-btn').classList.toggle('active', name === 'bottle');
+      document.getElementById('tab-comp-btn').classList.toggle('active', name === 'comp');
+    }
+
+    // ══════════════════════════════
+    // TAB 1: BOTTLE WEIGHT
+    // ══════════════════════════════
+    var NUM = 10;
+    var precision = '0.1';
+    var currentMean = null;
+
+    // Build bottle inputs (column-first: 1-5 left, 6-10 right)
+    var ROWS = 5;
+    var grid = document.getElementById('inputs-grid');
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < 2; c++) {
+        var idx = c === 0 ? r : r + 5;
+        var cell = document.createElement('div');
+        cell.className = 'input-row';
+        cell.innerHTML =
+          '<span class="input-num">' + String(idx + 1).padStart(2, '0') + '</span>' +
+          '<input class="weight-input" type="number" step="0.1" placeholder="0.0" id="w' + idx + '" oninput="updateBottle()" onkeydown="handleKey(event,' + idx + ')" />';
+        grid.appendChild(cell);
+      }
+    }
+
+    function handleKey(e, i) {
+      var target = null;
+      var col = i < 5 ? 0 : 1;
+      var rowPos = i < 5 ? i : i - 5;
+      if (e.key === 'Enter') {
+        target = (i + 1) % NUM;
+      } else if (e.key === 'ArrowDown') {
+        target = rowPos < ROWS - 1 ? i + 1 : (col === 0 ? 5 : 0);
+      } else if (e.key === 'ArrowUp') {
+        target = rowPos > 0 ? i - 1 : (col === 0 ? 9 : 4);
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        target = col === 0 ? i + 5 : i - 5;
+      }
+      if (target !== null) {
+        e.preventDefault();
+        var el = document.getElementById('w' + target);
+        el.focus(); el.select();
+      }
     }
 
     function setPrecision(p) {
@@ -585,54 +606,187 @@
       var ph = p === '0.1' ? '0.0' : '0.00';
       for (var i = 0; i < NUM; i++) {
         var inp = document.getElementById('w' + i);
-        inp.step = p;
-        inp.placeholder = ph;
+        inp.step = p; inp.placeholder = ph;
       }
-      update();
+      updateBottle();
       updateTargets();
     }
 
-    function clearAll() {
-      for (var i = 0; i < NUM; i++) {
-        document.getElementById('w' + i).value = '';
-      }
-      update();
+    function clearBottle() {
+      for (var i = 0; i < NUM; i++) document.getElementById('w' + i).value = '';
+      updateBottle();
     }
 
-    function update() {
+    function updateBottle() {
       var vals = [];
       for (var i = 0; i < NUM; i++) {
         var v = parseFloat(document.getElementById('w' + i).value);
         if (!isNaN(v)) vals.push(v);
       }
-
       var empty = document.getElementById('empty-msg');
       var content = document.getElementById('stats-content');
-
       if (vals.length === 0) {
-        empty.style.display = '';
-        content.style.display = 'none';
-        currentMean = null;
-        updateTargets();
-        return;
+        empty.style.display = ''; content.style.display = 'none';
+        currentMean = null; updateTargets(); return;
       }
-
       var mean = vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;
       currentMean = mean;
       var variance = vals.reduce(function(a, b) { return a + Math.pow(b - mean, 2); }, 0) / (vals.length - 1);
       var sd = Math.sqrt(variance);
       var cv = mean !== 0 ? (sd / mean) * 100 : 0;
-
       var prec = precision === '0.1' ? 1 : 2;
       document.getElementById('stat-mean').textContent = mean.toFixed(prec);
       document.getElementById('stat-sd').textContent = sd.toFixed(3);
       document.getElementById('stat-cv').textContent = cv.toFixed(2);
       document.getElementById('stat-count').textContent = 'n = ' + vals.length + ' / ' + NUM;
-
-      empty.style.display = 'none';
-      content.style.display = '';
+      empty.style.display = 'none'; content.style.display = '';
       updateTargets();
     }
+
+    function updateTargets() {
+      var sg = parseFloat(document.getElementById('sg').value);
+      var low = parseFloat(document.getElementById('tgt-low').value);
+      var mid = parseFloat(document.getElementById('tgt-mid').value);
+      var high = parseFloat(document.getElementById('tgt-high').value);
+      var resultsEl = document.getElementById('target-results');
+      if (isNaN(sg) || (isNaN(low) && isNaN(mid) && isNaN(high))) {
+        resultsEl.style.display = 'none'; return;
+      }
+      resultsEl.style.display = 'block';
+      var netLow  = isNaN(low)  ? null : low  * sg;
+      var netMid  = isNaN(mid)  ? null : mid  * sg;
+      var netHigh = isNaN(high) ? null : high * sg;
+      var meanVal = currentMean;
+      var prec = precision === '0.1' ? 1 : 2;
+      var fmt = function(v) { return v !== null ? v.toFixed(prec) : '—'; };
+      document.getElementById('net-low').textContent  = fmt(netLow);
+      document.getElementById('net-mid').textContent  = fmt(netMid);
+      document.getElementById('net-high').textContent = fmt(netHigh);
+      var rMean = meanVal !== null ? parseFloat(meanVal.toFixed(prec)) : null;
+      var rLow  = netLow  !== null ? parseFloat(netLow.toFixed(prec))  : null;
+      var rMid  = netMid  !== null ? parseFloat(netMid.toFixed(prec))  : null;
+      var rHigh = netHigh !== null ? parseFloat(netHigh.toFixed(prec)) : null;
+      document.getElementById('gross-low').textContent  = (rLow  !== null && rMean !== null) ? (rLow  + rMean).toFixed(prec) : '—';
+      document.getElementById('gross-mid').textContent  = (rMid  !== null && rMean !== null) ? (rMid  + rMean).toFixed(prec) : '—';
+      document.getElementById('gross-high').textContent = (rHigh !== null && rMean !== null) ? (rHigh + rMean).toFixed(prec) : '—';
+    }
+
+    // ══════════════════════════════
+    // TAB 2: COMPONENT WEIGHT
+    // ══════════════════════════════
+    var COMP_ROWS = 6;
+
+    // Build component table rows
+    var tbody = document.getElementById('comp-tbody');
+    for (var row = 0; row < COMP_ROWS; row++) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td>C' + (row + 1) + '</td>' +
+        '<td><input class="comp-input" type="number" step="0.01" placeholder="—" id="c' + row + '_0" oninput="updateComp()" onkeydown="handleCompKey(event,' + row + ',0)" /></td>' +
+        '<td><input class="comp-input" type="number" step="0.01" placeholder="—" id="c' + row + '_1" oninput="updateComp()" onkeydown="handleCompKey(event,' + row + ',1)" /></td>' +
+        '<td><input class="comp-input" type="number" step="0.01" placeholder="—" id="c' + row + '_2" oninput="updateComp()" onkeydown="handleCompKey(event,' + row + ',2)" /></td>' +
+        '<td><span class="comp-avg" id="cavg' + row + '">—</span></td>';
+      tbody.appendChild(tr);
+    }
+
+    function handleCompKey(e, row, col) {
+      var targetRow = row, targetCol = col;
+      if (e.key === 'Enter' || e.key === 'ArrowRight') {
+        if (col < 2) { targetCol = col + 1; }
+        else { targetRow = (row + 1) % COMP_ROWS; targetCol = 0; }
+      } else if (e.key === 'ArrowLeft') {
+        if (col > 0) { targetCol = col - 1; }
+        else { targetRow = (row - 1 + COMP_ROWS) % COMP_ROWS; targetCol = 2; }
+      } else if (e.key === 'ArrowDown') {
+        targetRow = (row + 1) % COMP_ROWS;
+      } else if (e.key === 'ArrowUp') {
+        targetRow = (row - 1 + COMP_ROWS) % COMP_ROWS;
+      } else { return; }
+      e.preventDefault();
+      var el = document.getElementById('c' + targetRow + '_' + targetCol);
+      if (el) { el.focus(); el.select(); }
+    }
+
+    function clearComp() {
+      for (var row = 0; row < COMP_ROWS; row++) {
+        for (var col = 0; col < 3; col++) {
+          document.getElementById('c' + row + '_' + col).value = '';
+        }
+      }
+      updateComp();
+    }
+
+    function updateComp() {
+      var colSums = [0, 0, 0];
+      var colCounts = [0, 0, 0];
+      var rowAvgs = [];       // avg per component row (null if no data)
+      var activeAvgs = [];    // only rows that have at least one value
+
+      for (var row = 0; row < COMP_ROWS; row++) {
+        var rowVals = [];
+        for (var col = 0; col < 3; col++) {
+          var v = parseFloat(document.getElementById('c' + row + '_' + col).value);
+          if (!isNaN(v)) {
+            rowVals.push(v);
+            colSums[col] += v;
+            colCounts[col]++;
+          }
+        }
+        var avgEl = document.getElementById('cavg' + row);
+        if (rowVals.length > 0) {
+          var avg = rowVals.reduce(function(a, b) { return a + b; }, 0) / rowVals.length;
+          rowAvgs.push(avg);
+          activeAvgs.push(avg);
+          avgEl.textContent = avg.toFixed(2);
+          avgEl.classList.add('has-value');
+        } else {
+          rowAvgs.push(null);
+          avgEl.textContent = '—';
+          avgEl.classList.remove('has-value');
+        }
+      }
+
+      // Column sums
+      for (var col = 0; col < 3; col++) {
+        var sumEl = document.getElementById('csum-' + col);
+        if (colCounts[col] > 0) {
+          sumEl.textContent = colSums[col].toFixed(2);
+          sumEl.classList.add('has-value');
+        } else {
+          sumEl.textContent = '—';
+          sumEl.classList.remove('has-value');
+        }
+      }
+
+      // Average of column sums (sum of active col sums / number of active cols)
+      var activeCols = colCounts.filter(function(c) { return c > 0; });
+      var avgSumEl = document.getElementById('csum-avg');
+      if (activeCols.length > 0) {
+        var totalSum = 0;
+        for (var col = 0; col < 3; col++) {
+          if (colCounts[col] > 0) totalSum += colSums[col];
+        }
+        var avgOfSums = totalSum / activeCols.length;
+        avgSumEl.textContent = avgOfSums.toFixed(2);
+      } else {
+        avgSumEl.textContent = '—';
+      }
+
+      // Minimum weight calculation
+      var mwResult = document.getElementById('mw-result');
+      var mwDetail = document.getElementById('mw-formula-detail');
+      if (activeAvgs.length > 0 && activeCols.length > 0) {
+        var avgOfTotals = parseFloat(avgSumEl.textContent);
+        var lightestAvg = Math.min.apply(null, activeAvgs);
+        var minWeight = avgOfTotals - (0.5 * lightestAvg);
+        mwResult.textContent = minWeight.toFixed(2);
+        mwDetail.textContent = avgOfTotals.toFixed(2) + ' \u2212 (0.5 \u00d7 ' + lightestAvg.toFixed(2) + ')';
+      } else {
+        mwResult.textContent = '—';
+        mwDetail.textContent = '\u00a0';
+      }
+    }
+
   </script>
 </body>
 </html>
