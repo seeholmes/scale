@@ -22,9 +22,16 @@ A mobile-optimized web app for pharmaceutical manufacturing QC weight calculatio
 - Rows with no data are ignored
 - Minimum weight calculation: `Avg of Totals − (0.5 × lightest component avg)`
 
+### Kit Weight Tab
+- 3 kit weights → auto average
+- 3 assembled bottle weights → auto average
+- Minimum weight calculation: `Avg Kit − (0.5 × Avg Bottle)`
+- Live formula display showing actual values used
+
 ### General
 - Light / dark theme toggle with persistence
 - iOS home screen ready (standalone web app)
+- About tab with release history and GitHub link
 
 ---
 
@@ -40,10 +47,10 @@ A mobile-optimized web app for pharmaceutical manufacturing QC weight calculatio
 ## Release Notes
 
 ### v1.10 — 2026-03-24
-- Added Component Weight tab
-- 6 component rows, 3 samples each with auto averages and column sums
-- Minimum weight calculation with live formula display
-- Two-tab interface (Bottle Wt / Component Wt / About)
+- Added Component Weight tab (6 components, 3 samples each, min weight calc)
+- Added Kit Weight tab (3 kit weights, 3 bottle weights, min weight calc)
+- Added About tab with release history and GitHub link
+- Two-tab interface expanded to four tabs
 - App renamed to QC Weight Tools
 
 ### v1.00 — 2026-03-23

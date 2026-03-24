@@ -458,6 +458,113 @@
       transition: border-color 0.15s;
     }
     .about-link:hover { border-color: var(--accent); }
+
+    /* ── KIT WEIGHT TAB ── */
+    .kit-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .kit-panel-title {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .kit-inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 8px;
+      align-items: end;
+    }
+    .kit-col { display: flex; flex-direction: column; gap: 4px; }
+    .kit-col-label {
+      color: var(--fainter);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .kit-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      padding: 8px 8px;
+      outline: none;
+      text-align: right;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    .kit-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(79,255,176,0.10); }
+    body.light .kit-input:focus { box-shadow: 0 0 0 2px rgba(0,168,107,0.12); }
+    .kit-input::placeholder { color: var(--fainter); }
+    .kit-avg-cell {
+      background: var(--input-bg);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 8px;
+      padding: 8px 8px;
+      text-align: right;
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+    }
+    .kit-avg-cell.has-value { color: var(--text); }
+    .kit-result-panel {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .kit-result-title {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .kit-result-formula {
+      color: var(--faint);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      line-height: 1.7;
+    }
+    .kit-result-formula span { color: var(--muted); }
+    .kit-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 10px;
+      border-top: 1px solid var(--panel-border);
+    }
+    .kit-result-label { color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+    .kit-result-value { color: var(--accent); font-size: 26px; font-weight: 500; letter-spacing: -0.01em; }
+    .kit-result-unit { color: var(--faint); font-size: 11px; margin-left: 4px; }
+
+    .kit-warning {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(255, 107, 107, 0.10);
+      border: 1.5px solid var(--danger);
+      border-radius: 8px;
+      color: var(--danger);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+    body.light .kit-warning {
+      background: rgba(224, 85, 85, 0.08);
+    }
+    .kit-divider { border: none; border-top: 1px solid var(--panel-border); margin: 16px 0; }
   </style>
 </head>
 <body>
@@ -480,6 +587,7 @@
     <div class="tabs">
       <button class="tab-btn active" id="tab-bottle-btn" onclick="switchTab('bottle')">Bottle Wt</button>
       <button class="tab-btn" id="tab-comp-btn" onclick="switchTab('comp')">Component Wt</button>
+      <button class="tab-btn" id="tab-kit-btn" onclick="switchTab('kit')">Kit Wt</button>
       <button class="tab-btn" id="tab-about-btn" onclick="switchTab('about')">About</button>
     </div>
 
@@ -661,6 +769,78 @@
       </div>
     </div><!-- end tab-about -->
 
+    <!-- ══ TAB 4: KIT WEIGHT ══ -->
+    <div class="tab-screen" id="tab-kit">
+
+      <div class="controls">
+        <div class="spacer"></div>
+        <button class="clear-btn" onclick="clearKit()">CLEAR</button>
+      </div>
+
+      <!-- Kit weights -->
+      <div class="kit-panel">
+        <div class="kit-panel-title">Kit Weights</div>
+        <div class="kit-inputs-grid">
+          <div class="kit-col">
+            <span class="kit-col-label">Kit 1</span>
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="kit0" oninput="updateKit()" onkeydown="handleKitKey(event,0,0)" />
+          </div>
+          <div class="kit-col">
+            <span class="kit-col-label">Kit 2</span>
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="kit1" oninput="updateKit()" onkeydown="handleKitKey(event,1,0)" />
+          </div>
+          <div class="kit-col">
+            <span class="kit-col-label">Kit 3</span>
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="kit2" oninput="updateKit()" onkeydown="handleKitKey(event,2,0)" />
+          </div>
+          <div class="kit-col">
+            <span class="kit-col-label">Avg</span>
+            <span class="kit-avg-cell" id="kit-avg">—</span>
+          </div>
+        </div>
+
+        <hr class="kit-divider" />
+
+        <!-- Bottle weights -->
+        <div class="kit-panel-title">Assembled Bottle Weights</div>
+        <div class="kit-inputs-grid">
+          <div class="kit-col">
+            <span class="kit-col-label">Bottle 1</span>
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl0" oninput="updateKit()" onkeydown="handleKitKey(event,0,1)" />
+          </div>
+          <div class="kit-col">
+            <span class="kit-col-label">Bottle 2</span>
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl1" oninput="updateKit()" onkeydown="handleKitKey(event,1,1)" />
+          </div>
+          <div class="kit-col">
+            <span class="kit-col-label">Bottle 3</span>
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl2" oninput="updateKit()" onkeydown="handleKitKey(event,2,1)" />
+          </div>
+          <div class="kit-col">
+            <span class="kit-col-label">Avg</span>
+            <span class="kit-avg-cell" id="btl-avg">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="kit-result-panel">
+        <div class="kit-result-title">Minimum Weight Calculation</div>
+        <div class="kit-result-formula">
+          Avg Kit &minus; (0.5 &times; Avg Bottle)<br>
+          <span id="kit-formula-detail">&nbsp;</span>
+        </div>
+        <div class="kit-result-row">
+          <span class="kit-result-label">Min Weight</span>
+          <span>
+            <span class="kit-result-value" id="kit-min-result">—</span>
+            <span class="kit-result-unit">g</span>
+          </span>
+        </div>
+      </div>
+
+    </div><!-- end tab-kit -->
+
   </div><!-- end container -->
 
   <script>
@@ -681,7 +861,7 @@
 
     // ── TABS ──
     function switchTab(name) {
-      ['bottle', 'comp', 'about'].forEach(function(t) {
+      ['bottle', 'comp', 'kit', 'about'].forEach(function(t) {
         document.getElementById('tab-' + t).classList.toggle('active', name === t);
         document.getElementById('tab-' + t + '-btn').classList.toggle('active', name === t);
       });
@@ -917,6 +1097,95 @@
       }
     }
 
+
+    // ══════════════════════════════
+    // TAB 3: KIT WEIGHT
+    // ══════════════════════════════
+    function handleKitKey(e, pos, section) {
+      // section 0 = kit row, section 1 = bottle row
+      // pos 0,1,2 within each row
+      var nextPos = pos, nextSection = section;
+      if (e.key === 'Enter' || e.key === 'ArrowRight') {
+        if (pos < 2) { nextPos = pos + 1; }
+        else if (section === 0) { nextPos = 0; nextSection = 1; }
+        else { nextPos = 0; nextSection = 0; } // wrap back to kit row
+      } else if (e.key === 'ArrowLeft') {
+        if (pos > 0) { nextPos = pos - 1; }
+        else if (section === 1) { nextPos = 2; nextSection = 0; }
+      } else if (e.key === 'ArrowDown') {
+        nextSection = section === 0 ? 1 : 0;
+      } else if (e.key === 'ArrowUp') {
+        nextSection = section === 0 ? 1 : 0;
+      } else { return; }
+      e.preventDefault();
+      var prefix = nextSection === 0 ? 'kit' : 'btl';
+      var el = document.getElementById(prefix + nextPos);
+      if (el) { el.focus(); el.select(); }
+    }
+
+    function clearKit() {
+      ['kit0','kit1','kit2','btl0','btl1','btl2'].forEach(function(id) {
+        document.getElementById(id).value = '';
+      });
+      updateKit();
+    }
+
+    function avgOf(ids) {
+      var vals = ids.map(function(id) {
+        return parseFloat(document.getElementById(id).value);
+      }).filter(function(v) { return !isNaN(v); });
+      if (vals.length === 0) return null;
+      return vals.reduce(function(a, b) { return a + b; }, 0) / vals.length;
+    }
+
+    function updateKit() {
+      var kitAvg = avgOf(['kit0','kit1','kit2']);
+      var btlAvg = avgOf(['btl0','btl1','btl2']);
+
+      var kitAvgEl = document.getElementById('kit-avg');
+      var btlAvgEl = document.getElementById('btl-avg');
+
+      if (kitAvg !== null) {
+        kitAvgEl.textContent = kitAvg.toFixed(2);
+        kitAvgEl.classList.add('has-value');
+      } else {
+        kitAvgEl.textContent = '—';
+        kitAvgEl.classList.remove('has-value');
+      }
+
+      var btlWarningEl = document.getElementById('btl-warning');
+      if (btlAvg !== null) {
+        btlAvgEl.textContent = btlAvg.toFixed(2);
+        btlAvgEl.classList.add('has-value');
+        // Check range of bottle weights
+        var btlVals = ['btl0','btl1','btl2'].map(function(id) {
+          return parseFloat(document.getElementById(id).value);
+        }).filter(function(v) { return !isNaN(v); });
+        if (btlVals.length >= 2) {
+          var range = Math.max.apply(null, btlVals) - Math.min.apply(null, btlVals);
+          btlWarningEl.style.display = range > 0.31 ? 'block' : 'none';
+        } else {
+          btlWarningEl.style.display = 'none';
+        }
+      } else {
+        btlAvgEl.textContent = '—';
+        btlAvgEl.classList.remove('has-value');
+        btlWarningEl.style.display = 'none';
+      }
+
+      var resultEl = document.getElementById('kit-min-result');
+      var formulaEl = document.getElementById('kit-formula-detail');
+      if (kitAvg !== null && btlAvg !== null) {
+        var rKit = parseFloat(kitAvg.toFixed(2));
+        var rBtl = parseFloat(btlAvg.toFixed(2));
+        var minWt = rKit - (0.5 * rBtl);
+        resultEl.textContent = minWt.toFixed(2);
+        formulaEl.textContent = rKit.toFixed(2) + ' − (0.5 × ' + rBtl.toFixed(2) + ')';
+      } else {
+        resultEl.textContent = '—';
+        formulaEl.textContent = ' ';
+      }
+    }
   </script>
 </body>
 </html>
