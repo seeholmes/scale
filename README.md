@@ -27,6 +27,7 @@ A mobile-optimized web app for pharmaceutical manufacturing QC weight calculatio
 - 3 assembled bottle weights → auto average
 - Minimum weight calculation: `Avg Kit − (0.5 × Avg Bottle)`
 - Live formula display showing actual values used
+- ⚠ Supervisor notification warning if bottle weights vary by more than 0.31g
 
 ### General
 - Light / dark theme toggle with persistence
@@ -49,8 +50,9 @@ A mobile-optimized web app for pharmaceutical manufacturing QC weight calculatio
 ### v1.10 — 2026-03-24
 - Added Component Weight tab (6 components, 3 samples each, min weight calc)
 - Added Kit Weight tab (3 kit weights, 3 bottle weights, min weight calc)
+- Bottle weight variance warning in Kit tab (flags >0.31g range, notify supervisor)
 - Added About tab with release history and GitHub link
-- Two-tab interface expanded to four tabs
+- Four-tab interface: Bottle Wt / Component Wt / Kit Wt / About
 - App renamed to QC Weight Tools
 
 ### v1.00 — 2026-03-23
