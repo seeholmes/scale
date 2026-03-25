@@ -585,9 +585,9 @@
 
     <!-- TABS -->
     <div class="tabs">
-      <button class="tab-btn active" id="tab-bottle-btn" onclick="switchTab('bottle')">Bottle Wt</button>
-      <button class="tab-btn" id="tab-comp-btn" onclick="switchTab('comp')">Component Wt</button>
-      <button class="tab-btn" id="tab-kit-btn" onclick="switchTab('kit')">Kit Wt</button>
+      <button class="tab-btn active" id="tab-bottle-btn" onclick="switchTab('bottle')">Bottle</button>
+      <button class="tab-btn" id="tab-comp-btn" onclick="switchTab('comp')">Component</button>
+      <button class="tab-btn" id="tab-kit-btn" onclick="switchTab('kit')">Kit</button>
       <button class="tab-btn" id="tab-about-btn" onclick="switchTab('about')">About</button>
     </div>
 
@@ -806,15 +806,15 @@
         <div class="kit-inputs-grid">
           <div class="kit-col">
             <span class="kit-col-label">Bottle 1</span>
-            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl0" oninput="updateKit()" onkeydown="handleKitKey(event,0,1)" />
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl0" onblur="updateKit()" onkeydown="handleKitKey(event,0,1)" />
           </div>
           <div class="kit-col">
             <span class="kit-col-label">Bottle 2</span>
-            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl1" oninput="updateKit()" onkeydown="handleKitKey(event,1,1)" />
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl1" onblur="updateKit()" onkeydown="handleKitKey(event,1,1)" />
           </div>
           <div class="kit-col">
             <span class="kit-col-label">Bottle 3</span>
-            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl2" oninput="updateKit()" onkeydown="handleKitKey(event,2,1)" />
+            <input class="kit-input" type="number" step="0.01" placeholder="—" id="btl2" onblur="updateKit()" onkeydown="handleKitKey(event,2,1)" />
           </div>
           <div class="kit-col">
             <span class="kit-col-label">Avg</span>
@@ -1164,7 +1164,7 @@
         var btlVals = ['btl0','btl1','btl2'].map(function(id) {
           return parseFloat(document.getElementById(id).value);
         }).filter(function(v) { return !isNaN(v); });
-        if (btlVals.length >= 2) {
+        if (btlVals.length === 3) {
           var range = Math.max.apply(null, btlVals) - Math.min.apply(null, btlVals);
           btlWarningEl.style.display = range > 0.31 ? 'block' : 'none';
         } else {
